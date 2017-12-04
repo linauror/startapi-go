@@ -1,0 +1,99 @@
+<div id="container">
+    <h2 class="page_title">{{.headerTitle}}</h2>
+    <form class="form" method="post">
+        <input type="hidden" name="id" value="{{.info.Id}}"/>
+        <p><label>接口名称：</label><input type="text" required="true" maxlength="20" name="title" value="{{.info.Title}}"/>
+        </p>
+        <p><label>接口URI：</label><input type="text" required="true" maxlength="50" name="uri" value="{{.info.Uri}}"/></p>
+        <p><label>请求方式：</label><select name="method_type">
+            <option value="GET">GET</option>
+            <option value="POST" {{if eq .info.MethodType "POST"}}selected{{end}}>POST</option>
+        </select></p>
+        <p><label>需要授权：</label><input type="checkbox" name="is_authed" value="1"
+                                      {{if eq .info.IsAuthed 1}}checked{{end}}/></p>
+        <p><label>接口描述：</label><textarea name="desc">{{.info.Desc}}</textarea></p>
+        <fieldset class="param_block" id="request_param">
+            <legend>请求参数</legend>
+            <table>
+                <thead>
+                <tr>
+                    <th width="20%">参数名</th>
+                    <th width="10%">参数类型</th>
+                    <th width="5%">必填</th>
+                    <th width="20%">默认值</th>
+                    <th>描述</th>
+                    <th width="8%"></th>
+                </tr>
+                </thead>
+                <tbody>
+                {{range $key, $val := .RequestParam}}
+                <tr>
+                    <td><input type="text" name="request_param[{{$key}}][field]" required="true"
+                               value="{{$val.field}}"/></td>
+                    <td><select name="request_param[{{$key}}][data_type]">
+                        <option value="string">string</option>
+                        <option value="int" {{if eq $val.data_type "int"}}selected{{end}}>int</option>
+                    </select></td>
+                    <td><select name="request_param[{{$key}}][is_required]">
+                        <option value="1">是</option>
+                        <option value="0" {{if eq $val.is_required "0"}}selected{{end}}>否</option>
+                    </select></td>
+                    <td><input type="text" name="request_param[{{$key}}][default_val]" value="{{$val.default_val}}"/></td>
+                    <td><input type="text" name="request_param[{{$key}}][desc]" value="{{$val.desc}}"/></td>
+                    <td class="action"><a href="javascript:;" class="del_param" title="删除参数">删除</a> | <a
+                            href="javascript:;" class="insert_param" title="插入参数">插入</a></td>
+                </tr>
+                {{end}}
+                </tbody>
+            </table>
+            <p class="add_param">添加参数</p>
+        </fieldset>
+        <fieldset class="param_block">
+            <legend>请求示例说明</legend>
+            <textarea name="request_code">{{.info.RequestCode}}</textarea>
+        </fieldset>
+        <fieldset class="param_block" id="result_param">
+            <legend>返回参数</legend>
+            <table class="dd">
+                <thead>
+                <tr>
+                    <th width="20%">参数名</th>
+                    <th width="10%">参数类型</th>
+                    <th width="5%">必传</th>
+                    <th width="20%">默认值</th>
+                    <th>描述</th>
+                    <th width="8%"></th>
+                </tr>
+                </thead>
+                <tbody class="dd-list">
+                {{range $key, $val := .ResultParam}}
+                <tr class="dd-item">
+                    <td><input type="text" name="result_param[{{$key}}][field]" required="true" value="{{$val.field}}"/></td>
+                    <td><select name="result_param[{{$key}}][data_type]">
+                        <option value="string">string</option>
+                        <option value="int" {{if eq $val.data_type "int"}}selected{{end}}>int</option>
+                    </select></td>
+                    <td><select name="result_param[{{$key}}][is_required]">
+                        <option value="1">是</option>
+                        <option value="0" {{if eq $val.is_required "0"}}selected{{end}}>否</option>
+                    </select></td>
+                    <td><input type="text" name="result_param[{{$key}}][default_val]" value="{{$val.default_val}}"/></td>
+                    <td><input type="text" name="result_param[{{$key}}][desc]" value="{{$val.desc}}"/></td>
+                    <td class="action"><a href="javascript:;" class="del_param" title="删除参数">删除</a> | <a
+                            href="javascript:;" class="insert_param" title="插入参数">插入</a></td>
+                </tr>
+                {{end}}
+                </tbody>
+            </table>
+            <p class="add_param">添加参数</p>
+        </fieldset>
+        <fieldset class="param_block">
+            <legend>返回示例说明</legend>
+            <textarea name="result_code">{{.info.ResultCode}}</textarea>
+        </fieldset>
+        <p><input type="submit" value="提 交"/></p>
+    </form>
+</div>
+<script type="text/javascript">
+    var request_param_index = {{.count}};
+</script>

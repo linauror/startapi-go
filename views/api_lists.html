@@ -1,0 +1,17 @@
+<div id="container" class="dd">
+	<h2 class="page_title"><p class="action"><a href="{{urlfor "IndexController.ApiAdd" "category_id" .categoryInfo.Id}}">接口新增</a></p>{{.categoryInfo.Title}}</h2>
+	<ol class="lists dd-list">
+		{{range $key, $val := .list}}
+		<li class="dd-item" data-id="{{$val.Id}}" title="{{$val.Desc}}">
+			<p class="action"><a href="{{urlfor "IndexController.ApiUpdate" "id" $val.Id}}">编辑</a> | <a href="{{urlfor "IndexController.ApiDel" "id" $val.Id}}" class="confirm_del">删除</a></p>
+			<a class="dd-handle" title="拖动以排序" href="javascript:;"></a><a href="{{urlfor "IndexController.ApiUpdate" "id" $val.Id}}">{{$val.Title}} {{$val.Uri}}</a>
+		</li>
+		{{end}}
+	</ol>
+</div>
+<script type="text/javascript" src="/static/js/jquery.nestable.js"></script>
+<script type="text/javascript">
+$(function() {
+	$('.dd').nestable({'maxDepth' : 1}).on('change', function() {list_sort('{{urlfor "IndexController.ApiSort"}}')});
+})
+</script>

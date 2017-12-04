@@ -1,0 +1,9 @@
+<div id="container">
+	<h2 class="page_title">{{.headerTitle}}</a></h2>
+	<form class="form" method="post">
+		<input type="hidden" name="id" value="{{.info.Id}}" />
+		<p><label>分类名称：</label><input type="text" required="true" maxlength="20" name="title" value="{{.info.Title}}" /></p>
+		<p><label>分类描述：</label><textarea name="desc">{{.info.Desc}}</textarea></p>
+		<p><label>&nbsp;</label><input type="submit" value="提 交" /></p>
+	</form>
+</div>

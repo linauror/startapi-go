@@ -1,0 +1,20 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8" />
+    <title>{{.headerTitle}} - {{config "String" "appname" ""}}</title>
+    <link type="text/css" rel="stylesheet" href="/static/css/style.css" />
+    <script type="text/javascript" src="/static/js/zepto.min.js"></script>
+    <script type="text/javascript" src="/static/js/main.js"></script>
+</head>
+
+<body>
+<header>
+    <h1><a href="{{urlfor "IndexController.Index"}}">{{config "String" "appname" ""}}</a></h1>
+    <p>版本：{{config "String" "ver" ""}}&nbsp;作者：{{config "String" "author" ""}}&nbsp;最后更新：{{config "String" "lastupdate" ""}} <a href="{{urlfor "IndexController.Pub"}}">发布</a></p>
+</header>
+{{.LayoutContent}}
+<footer>Powered By StartApi</footer>
+<div id="msg_tip"><p>{{.flash.error}}</p></div>
+</body>
+</html>
