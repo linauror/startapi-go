@@ -2,14 +2,11 @@ package controllers
 
 import (
 	"encoding/json"
-	"net/http"
-	"os"
-	"bufio"
-	"io/ioutil"
 
 	"github.com/astaxie/beego"
 
 	"github.com/linauror/startapi-go/models"
+	"github.com/astaxie/beego/httplib"
 )
 
 type IndexController struct {
@@ -206,13 +203,8 @@ func (self *IndexController) ApiDel() {
 
 func (self *IndexController) Pub() {
 	url := beego.URLFor("IndexController.Publish")
-	resp, _ := http.Get("http://" + self.Ctx.Request.Host + url)
-	outputFile, _ := os.OpenFile("api.html", os.O_WRONLY|os.O_CREATE, 0666)
-	defer outputFile.Close()
-	outputWriter := bufio.NewWriter(outputFile)
-	outputString, _ := ioutil.ReadAll(resp.Body)
-	outputWriter.WriteString(string(outputString))
-	outputWriter.Flush()
+	req := httplib.Get("http://" + self.Ctx.Request.Host + url)
+	req.ToFile("api.html")
 
 	self.Data["headerTitle"] = "文档生成"
 	self.TplName = "create_html.html"
