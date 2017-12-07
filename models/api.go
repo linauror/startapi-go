@@ -1,6 +1,9 @@
 package models
 
-import "github.com/astaxie/beego/orm"
+import (
+	"github.com/astaxie/beego/orm"
+	"strconv"
+)
 
 type Api struct {
 	Id           int64
@@ -25,7 +28,7 @@ func ApiList(categoryId int64) ([]*Api, int64) {
 	}
 	total, _ := query.Count()
 	list := make([]*Api, 0)
-	query.Filter("deleted", 0).OrderBy("id").All(&list)
+	query.Filter("deleted", 0).OrderBy("-sort", "id").All(&list)
 	return list, total
 }
 
@@ -58,5 +61,14 @@ func ApiDel(id int64) (error) {
 		return err
 	}
 	return nil
+}
+
+func ApiSort(newSort map[string]int)  {
+	_sql := ""
+	for k, v := range newSort {
+		_sql += " WHEN " + k + " THEN " + strconv.Itoa(v)
+	}
+	sql := "UPDATE `api` SET `sort` = CASE `id` " + _sql + " END"
+	orm.NewOrm().Raw(sql).Exec()
 }
 

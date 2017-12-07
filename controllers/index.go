@@ -3,9 +3,9 @@ package controllers
 import (
 	"encoding/json"
 
-	"github.com/astaxie/beego"
-
 	"github.com/linauror/startapi-go/models"
+
+	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/httplib"
 )
 
@@ -14,6 +14,13 @@ type IndexController struct {
 }
 
 func (self *IndexController) Index() {
+	if self.Ctx.Input.IsPost() {
+		sort := self.GetString("sort")
+		_sort := make(map[string]int, 0)
+		json.Unmarshal([]byte(sort), &_sort)
+		models.CategorySort(_sort)
+	}
+
 	list, total := models.CategoryList()
 
 	self.Data["list"] = list
@@ -68,6 +75,13 @@ func (self *IndexController) CategoryDel() {
 }
 
 func (self *IndexController) ApiList() {
+	if self.Ctx.Input.IsPost() {
+		sort := self.GetString("sort")
+		_sort := make(map[string]int, 0)
+		json.Unmarshal([]byte(sort), &_sort)
+		models.ApiSort(_sort)
+	}
+
 	categoryId, _ := self.GetInt64("category_id")
 	categoryInfo, _ := models.CategoryInfo(categoryId)
 	list, total := models.ApiList(categoryId)

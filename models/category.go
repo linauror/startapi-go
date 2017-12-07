@@ -1,6 +1,8 @@
 package models
 
 import (
+	"strconv"
+
 	"github.com/astaxie/beego/orm"
 )
 
@@ -16,7 +18,7 @@ func CategoryList() ([]*Category, int64) {
 	query := orm.NewOrm().QueryTable("category")
 	total, _ := query.Count()
 	list := make([]*Category, 0)
-	query.Filter("deleted", 0).OrderBy("id").All(&list)
+	query.Filter("deleted", 0).OrderBy("-sort", "id").All(&list)
 	return list, total
 }
 
@@ -49,4 +51,13 @@ func CategoryDel(id int64) (error) {
 		return err
 	}
 	return nil
+}
+
+func CategorySort(newSort map[string]int)  {
+	_sql := ""
+	for k, v := range newSort {
+		_sql += " WHEN " + k + " THEN " + strconv.Itoa(v)
+	}
+	sql := "UPDATE `category` SET `sort` = CASE `id` " + _sql + " END"
+	orm.NewOrm().Raw(sql).Exec()
 }
